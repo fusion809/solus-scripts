@@ -20,7 +20,9 @@ if ! [[ -f /usr/lib/x86_64-linux-gnu/liblua5.1.so ]] ; then
          if ! [[ -f /usr/lib64/liblua5.1.so.0 ]]; then
               if ! [[ -f /usr/lib64/liblua.so.5.1.5 ]]; then
                    if ! [[ -f /usr/lib64/liblua.so.5.1 ]]; then
-                        zenity --error --text="Lua 5.1 libs are not found in /usr/lib/x86_64-linux-gnu, /lib64 or /usr/lib64. If they are installed somewhere else, but in LD_LIBRARY_PATH, feel free to ignore this warning, otherwise install these libraries please" --title="Error!" && exit
+			     if ! [[ -f /usr/lib/liblua5.1.so.5.1 ]]; then
+                                  zenity --error --text="Lua 5.1 libs are not found in /usr/lib/x86_64-linux-gnu, /lib64 or /usr/lib64. If they are installed somewhere else, but in LD_LIBRARY_PATH, feel free to ignore this warning, otherwise install these libraries please" --title="Error!" && exit
+		             fi
                    fi
               fi
          fi
@@ -62,6 +64,9 @@ fi
 
 if ! [[ -f /usr/bin/openra-ra ]] || [[ -f /usr/lib/openra/method ]] ; then
     zenity --error --text="OpenRA is going to be updated to commit $commco" --title="Warning!"
+    if ! [[ $1 == "install" ]]; then
+         make clean
+    fi
     make version VERSION="bleed-$commco"
     echo "Manually build" | sudo tee -a  /usr/lib/openra/method
     make

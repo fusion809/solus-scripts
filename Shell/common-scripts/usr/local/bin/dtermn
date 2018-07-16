@@ -18,7 +18,7 @@ pkgpver=$(cat /data/OBS/home:fusion809/deepin-terminal/deepin-terminal.spec | gr
 
 # Stable release checker
 if ! [[ $pkgver == $pkgpver ]]; then
-    printf "DT$pkgver"
+    printf "DT$pkgver\n"
 else
-    printf "DT"
+    printf "DT\n"
 fi

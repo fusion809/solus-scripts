@@ -1,0 +1,20 @@
+#!/bin/bash
+# OpenRA Red Alert Unplugged mod latest commit available
+OBS_PATH="/data/OBS/home:fusion809/openra-ura"
+cd /home/fusion809/GitHub/others/uRA
+
+# update repository
+if `which git > /dev/null 2>&1`; then
+    git pull origin master -q
+else
+    zenity --error --text="git isn't found. Please install it, or if it is installed edit your system PATH." --title="Warning!" && exit
+fi
+
+orlv=$(git rev-list --branches master --count)
+comm=$(git log -1 --format=%h)
+# OpenRA latest packaged version
+orpv=$(cat $OBS_PATH/openra-ura.spec | grep "Version:" | sed 's/Version:\s*//g')
+
+if ! [[ $orpv == $orlv ]]; then
+    zenity --error --text="A new OpenRA Red Alert Unplugged mod commit (${comm}) is available\! To update to it run uRAup." --title="Warning\!"
+fi

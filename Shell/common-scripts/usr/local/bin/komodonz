@@ -1,0 +1,14 @@
+#!/bin/bash
+if `which curl > /dev/null 2>&1`; then
+    pkgver=$(curl -sL https://www.activestate.com/komodo-ide/downloads/edit | grep "linux-x86_64" | cut -d '/' -f 10)
+elif `which wget > /dev/null 2>&1`; then
+    pkgver=$(wget -cqO- https://www.activestate.com/komodo-ide/downloads/edit | grep "linux-x86_64" | cut -d '/' -f 10)
+else
+    zenity --error --text="Neither cURL nor wget are detected, please install them, or if installed add to system PATH." --title="Warning!" && exit
+fi
+
+pkgpver=$(cat /data/OBS/home:fusion809/komodo-edit/komodo-edit.spec | grep "Version:" | cut -d ':' -f 2 | sed 's/\s*//g')
+
+if ! [[ $pkgver == $pkgpver ]]; then
+    zenity --error --text="A new Komodo Edit release (${pkgver}) is available!" --title="Warning!"    
+fi

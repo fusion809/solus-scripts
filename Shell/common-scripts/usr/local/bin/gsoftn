@@ -1,0 +1,21 @@
+#!/bin/bash
+while ! `ping -q -w 1 -c 1 $(ip r | grep default | cut -d ' ' -f 3) > /dev/null`
+do
+    sleep 60
+done
+
+if `which wget > /dev/null 2>&1`; then
+    pkgver=$(wget -cqO- https://github.com/GNOME/gnome-software/releases | grep "tar\.gz" | grep "3\.[02468]*\.[0-9]*" | cut -d '/' -f 5 | cut -d '"' -f 1 | sed 's/\.tar\.gz//g' | head -n 1)
+elif `which curl > /dev/null 2>&1`; then
+    pkgver=$(curl -sL https://github.com/GNOME/gnome-software/releases | grep "tar\.gz" | grep "3\.[02468]*\.[0-9]*" | cut -d '/' -f 5 | cut -d '"' -f 1 | sed 's/\.tar\.gz//g' | head -n 1)
+else
+    printf "Neither cURL nor wget have been found, please install them, or if already installed, add them to the system PATH.\n" && exit
+fi
+
+pkgpver=$(cat /data/OBS/home:fusion809/gnome-software/gnome-software.spec | grep "Version:" | cut -d ':' -f 2 | sed 's/\s*//g')
+
+if [[ $pkgver == $pkgpver ]]; then
+    printf "GSoft\n"
+else
+    printf "GSoft${pkgver}\n"
+fi

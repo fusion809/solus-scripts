@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# Determine latest version of terminal
+if `which curl > /dev/null 2>&1`; then
+    pkgver=$(curl -sL https://github.com/linuxdeepin/deepin-terminal/releases | grep "\.tar\.gz" | head -n 1 | cut -d '/' -f 5 | cut -d '"' -f 1 | sed 's/v//g' | sed 's/\.tar\.gz//g')
+elif `which wget > /dev/null 2>&1`; then
+    pkgver=$(wget -cqO- https://github.com/linuxdeepin/deepin-terminal/releases | grep "\.tar\.gz" | head -n 1 | cut -d '/' -f 5 | cut -d '"' -f 1 | sed 's/v//g' | sed 's/\.tar\.gz//g')
+else
+    zenity --error --text="Neither cURL nor wget are detected, please install them, or if already installed please add them to the system PATH.\n" && exit
+fi
+
+pkgpver=$(cat /data/OBS/home:fusion809/deepin-terminal/deepin-terminal.spec | grep "Version:"  | sed 's/Version:\s*//g')
+
+# Stable release checker
+if ! [[ $pkgver == $pkgpver ]]; then
+    zenity --error --text="A new release ($pkgver) of Deepin Terminal is available."
+fi

@@ -1,0 +1,15 @@
+#!/bin/bash
+# OpenRA Generals Alpha latest commit available
+cd /home/fusion809/GitHub/others/yr
+if ! `which git > /dev/null 2>&1`; then
+    zenity --error --text="git is not detected, either install it or if already installed at it to the system PATH!" --title="Warning!" && exit
+fi
+git pull origin master -q
+orlv=$(git rev-list --branches master --count)
+comm=$(git log -1 --format=%h)
+# OpenRA latest packaged version
+orpv=$(cat /data/OBS/home:fusion809/openra-yr/openra-yr.spec | grep "Version:" | sed 's/Version:\s*//g')
+
+if ! [[ $orpv == $orlv ]]; then
+    zenity --error --text="A new OpenRA yr mod commit (${pkgver}) is available, to upgrade to it run drup!" --title="Warning!"
+fi

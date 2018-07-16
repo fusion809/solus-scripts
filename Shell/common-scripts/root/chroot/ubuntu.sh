@@ -1,0 +1,3 @@
+function uroot {
+    genroot /ubuntu
+}

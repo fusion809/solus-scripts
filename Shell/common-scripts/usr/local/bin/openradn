@@ -1,0 +1,21 @@
+#!/bin/bash
+while ! `ping -q -w 1 -c 1 $(ip r | grep default | cut -d ' ' -f 3) > /dev/null`
+do
+    sleep 60
+done
+
+# OpenRA Dark Reign latest commit available
+cd /home/fusion809/GitHub/others/DarkReign
+if ! `which git > /dev/null 2>&1`; then
+    printf "git is not detected, either install it or if already installed at it to the system PATH.\n" && exit
+fi
+git pull origin master -q
+orlv=$(git rev-list --branches master --count)
+# OpenRA latest packaged version
+orpv=$(cat /data/OBS/home:fusion809/openra-dr/openra-dr.spec | grep "Version:" | sed 's/Version:\s*//g')
+
+if [[ $orpv == $orlv ]]; then
+    printf "ORADR \n"
+else
+    printf "ORADR${orlv}\n"
+fi

@@ -1,0 +1,21 @@
+#!/bin/bash
+function calc {
+    TZ="Australia/Brisbane" date +"%$1"
+}
+
+S=$(calc S)
+M=$(calc M)
+H=$(calc H)
+D=$(calc d)
+m=$(calc m)
+Y=$(calc Y)
+
+OS=$(cat /etc/os-release | grep "^ID" | cut -d '=' -f 2 | head -n 1)
+OS=${OS^}
+if ! `which import > /dev/null 2>&1`; then
+    if `which zenity > /dev/null 2>&1`; then
+         zenity --error --text="import command not found, please which if ImageMagick is installed, if not, install it, otherwise add the import command to your system PATH!" --title="Error!"
+    fi
+fi
+
+import -window root -frame -silent "/home/fusion809/Pictures/Screenshots/${XDG_SESSION_DESKTOP}/Screenshot_${OS}_${Y}${m}${D}_${H}${M}${S}.png" || zenity --error --text="Screenshot command:\n<span bgcolor='#CCCCCC'><tt>import -window root -frame -silent \"/home/fusion809/Pictures/Screenshots/${XDG_SESSION_DESKTOP}/Screenshot_${OS}_${Y}${m}${D}_${H}${M}${S}.png\"</tt></span>" --width=1000 

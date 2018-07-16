@@ -1,0 +1,50 @@
+#!/bin/bash
+if ! `which zenity > /dev/null 2>&1`; then
+    printf "Zenity is not installed, so there is nothing for me to generate popup windows.\n" && exit
+fi
+
+if ! `which curl > /dev/null 2>&1`; then
+    if ! `which wget > /dev/null 2>&1`; then
+         zenity --error --text="Neither cURL nor wget have been detected. These are required in order to check for updates. Please install at least one of them and if one is already installed please edit your system PATH and re-run this script." --title="Warning!" && exit
+    fi
+fi
+
+if ! `which git > /dev/null 2>&1`; then
+    zenity --error --text="git cannot be detected in which system PATH. If it is not installed please install it, if it is please edit system PATH so this script can find it.\n" && exit
+fi
+
+0adnz;
+atomnz;
+avogadronz;
+avogadrolnz;
+codelitenz;
+dtermnz;
+flatnz;
+gsoftnz;
+jmolnz;
+jucippnz;
+komodonz;
+libmsymnz;
+molenz;
+netbeansnz;
+obsaz;
+openbabelnz;
+openranz;
+openrabnz;
+openracnz;
+openradnz;
+openragnz;
+openra2nz;
+openrauranz;
+openraynz;
+oscnz;
+ostreenz;
+pymolnz;
+snapdnz;
+snapdgnz;
+spglibnz;
+sublnz;
+adeptnz;
+vimnz;
+vscodenz;
+zshnz

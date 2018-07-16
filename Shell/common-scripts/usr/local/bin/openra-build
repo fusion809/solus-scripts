@@ -1,0 +1,75 @@
+#!/bin/bash
+cd /home/fusion809/GitHub/mine/packaging/OpenRA
+# Check for git
+if ! `which git > /dev/null 2>&1`; then
+    zenity --error --text="git not found, please add it to system path, presumably after installing it." --title="Error!" && exit
+fi
+# Check for make
+if ! `which make > /dev/null 2>&1`; then
+    zenity --error --text="make is missing, please add it to system path, which will likely be after you install it." --title="Error!" && exit
+fi
+
+# Check for mono
+if ! `which mono > /dev/null 2>&1`; then
+    zenity --error --text="mono is missing, please add it to system path, which will likely be after you install it." --title="Error!" && exit
+fi
+
+# Check for Lua 5.1 libraries
+if ! [[ -f /usr/lib/x86_64-linux-gnu/liblua5.1.so ]] ; then
+    if ! [[ -f /lib64/liblua5.1.so ]]; then
+         if ! [[ -f /usr/lib64/liblua5.1.so.0 ]]; then
+              if ! [[ -f /usr/lib64/liblua.so.5.1.5 ]]; then
+                   if ! [[ -f /usr/lib64/liblua.so.5.1 ]]; then
+                        zenity --error --text="Lua 5.1 libs are not found in /usr/lib/x86_64-linux-gnu, /lib64 or /usr/lib64. If they are installed somewhere else, but in LD_LIBRARY_PATH, feel free to ignore this warning, otherwise install these libraries please" --title="Error!" && exit
+                   fi
+              fi
+         fi
+    fi
+fi
+#printf "Updating my OpenRA fork...\n"
+#git pull upstream bleed -q
+
+#printf "Determining the number of the latest bleed commit..."
+#commc=$(git rev-list --branches bleed --count)
+#printf "${commc}.\n"
+
+#commn=$(octave --eval "$commc+1" | sed "s/ans =\s*//g")
+#printf "Next commit's number will be ${commn}.\n"
+
+#printf "Let's sed to replace the current version listed in mods/*/mod.yaml and VERSION to the $commn.\n"
+#sed -i -e "s/Version: [0-9]*/Version: ${commn}/g" mods/*/mod.yaml
+#sed -i -e "s/[0-9]*/${commn}/g" VERSION
+
+#printf "Done. Now run make clean to remove build artefacts so we can commit these changes...\n"
+#make clean
+
+#printf "Time to do some committng...\n"
+#git add --all
+#git commit -m "Upstream update"
+#printf "Tagging and pushing new release $commn...\n"
+#git tag $commn
+#git push origin $commn
+#printf "Pushing to bleed branch...\n"
+
+cd /home/fusion809/GitHub/others/OpenRA
+commco=$(git rev-list --branches bleed --count)
+
+VERSION=$(cat /usr/lib/openra/VERSION)
+
+if [[ $VERSION == "bleed-$commco" ]]; then
+    printf "At the latest commit already mate!\n" ; exit
+fi
+
+if ! [[ -f /usr/bin/openra-ra ]] || [[ -f /usr/lib/openra/method ]] ; then
+    zenity --error --text="OpenRA is going to be updated to commit $commco" --title="Warning!"
+    make version VERSION="bleed-$commco"
+    echo "Manually build" | sudo tee -a  /usr/lib/openra/method
+    make
+    sudo make prefix=/usr install-core
+    sudo make prefix=/usr install-linux-shortcuts
+    sudo make prefix=/usr install-linux-mime
+    sudo make prefix=/usr install-man-page
+    sudo rm /usr/lib/openra/*.sh
+    sudo mkdir -p /var/games/openra/ModMetadata/
+    git stash
+fi

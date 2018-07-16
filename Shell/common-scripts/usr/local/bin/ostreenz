@@ -1,0 +1,14 @@
+#!/bin/bash
+if `which wget > /dev/null 2>&1`; then
+    pkgver=$(wget -cqO- https://github.com/ostreedev/ostree/releases | grep "tar\.xz" | cut -d '/' -f 6 | sed "s|v||g" | head -n 1)
+elif `which curl > /dev/null 2>&1`; then
+    pkgver=$(curl -sL https://github.com/ostreedev/ostree/releases | grep "tar\.xz" | cut -d '/' -f 6 | sed "s|v||g" | head -n 1)
+else
+    zenity --error --text="Neither cURL nor wget are detected, please install them, or if installed add to system PATH." --title="Warning!" && exit
+fi
+
+pkgpver=$(cat /data/OBS/home:fusion809/libostree/libostree.spec | grep "Version:" | cut -d ':' -f 2 | sed 's/\s*//g')
+
+if ! ( [[ $pkgver == $pkgpver ]] | [[ $pkgver == 2018.6 ]] ); then
+    zenity --error --text="A new OSTree release (${pkgver}) is available!" --title="Warning!"
+fi

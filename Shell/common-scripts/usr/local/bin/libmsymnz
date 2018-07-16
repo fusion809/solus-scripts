@@ -1,0 +1,16 @@
+#!/bin/bash
+# libmsym latest version available
+cd /home/fusion809/GitHub/others/libmsym
+if `which git > /dev/null 2>&1`; then
+    git pull origin master -q
+    orlv=$(git rev-list --branches master --count)
+    comm=$(git log -1 --format=%h)
+else
+    zenity --error --text "git has not been detected in the system PATH. Please either install it, if it is not already installed, or add it to the system PATH if it already is!" --title="Warning!"
+fi
+# libmsym latest packaged version
+orpv=$(cat /data/OBS/home:fusion809/libmsym/libmsym.spec | grep "Version:" | sed 's/Version:\s*//g')
+
+if ! [[ $orpv == $orlv ]]; then
+    zenity --error --text="A new libmsym commit ($comm) is available!" --title="Warning!"
+fi

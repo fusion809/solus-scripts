@@ -1,0 +1,30 @@
+#!/bin/bash
+if `which wget > /dev/null 2>&1`; then
+    msg=$(wget -cqO- https://build.opensuse.org/project/show/home:fusion809/ | grep "build error" | cut -d '>' -f 2 | cut -d '<' -f 1)
+elif `which curl > /dev/null 2>&1`; then
+    msg=$(curl -sL https://build.opensuse.org/project/show/home:fusion809/ | grep "build error" | cut -d '>' -f 2 | cut -d '<' -f 1)
+fi
+
+if [[ -n $msg ]]; then
+    printf "$msg: "
+fi
+
+pkgs=$(wget -cqO- "https://build.opensuse.org/project/monitor/home:fusion809?blocked=0&building=0&dispatching=0&finished=0&scheduled=0&signing=0&succeeded=0" | grep "/package/live_build_log/home:fusion809" | cut -d '/' -f 5)
+archs=$(wget -cqO- "https://build.opensuse.org/project/monitor/home:fusion809?blocked=0&building=0&dispatching=0&finished=0&scheduled=0&signing=0&succeeded=0" | grep "/package/live_build_log/home:fusion809" | cut -d '/' -f 7 | cut -d '"' -f 1)
+distros=$(wget -cqO- "https://build.opensuse.org/project/monitor/home:fusion809?blocked=0&building=0&dispatching=0&finished=0&scheduled=0&signing=0&succeeded=0" | grep "/package/live_build_log/home:fusion809" | cut -d '/' -f 6 | sed 's/openSUSE_//g' | sed 's/Tumbleweed/TW/g' | sed 's/Fedora_/F/g' | sed 's/Debian_/D/g' | sed 's/xUbuntu_/U/g' | sed 's/CentOS_/C/g')
+statuses=$(wget -cqO- "https://build.opensuse.org/project/monitor/home:fusion809?blocked=0&building=0&dispatching=0&finished=0&scheduled=0&signing=0&succeeded=0" | grep "/package/live_build_log/home:fusion809" | cut -d '>' -f 3 | cut -d '<' -f 1)
+
+if [[ -n $pkgs ]]; then
+    no=$(echo "$pkgs" | wc -l)
+
+    for i in $(seq 1 $no)
+    do
+         printf "$(echo "$pkgs" | sed -n "${i},${i}p") $(echo "$distros" | sed -n "${i},${i}p") ($(echo "$archs" | sed -n "${i},${i}p")) $(echo "$statuses" | sed -n "${i},${i}p")"
+         
+         if [[ $i < $no ]]; then
+              printf "; "
+         fi
+    done
+else
+    printf "All is good!\n"
+fi

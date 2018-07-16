@@ -1,0 +1,3 @@
+function proot {
+    genroot /pclinuxos
+}

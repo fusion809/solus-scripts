@@ -1,0 +1,9 @@
+#!/bin/bash
+pkgver=$(wget -cqO- https://www.linuxmint.com/ | grep "?p=" | grep "div" | head -n 1 | cut -d '"' -f 4 | cut -d '=' -f 2)
+announc=$(wget -cqO- https://www.linuxmint.com/ | grep "${pkgver}" | cut -d '>' -f 9 | cut -d '<' -f 1)
+
+if [[ $pkgver == 3583 ]]; then
+    printf "Mint\n"
+else
+    zenity --error --text="A new Mint announcement (${pkgver}) has been made! It is: ${announc}" --title="Warning!"
+fi

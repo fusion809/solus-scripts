@@ -1,3 +1,0 @@
-function mroot {
-    genroot /mageia
-}

@@ -1,3 +1,0 @@
-function aroot {
-    genroot /arch
-}

@@ -1,5 +1,0 @@
-#!/bin/bash
-export DIR=/data/GitHub/mine/websites/fusion809.github.io
-pushd $DIR
-/usr/bin/gvim
-popd

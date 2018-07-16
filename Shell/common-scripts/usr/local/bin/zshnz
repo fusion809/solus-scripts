@@ -1,7 +1,0 @@
-#!/bin/bash
-pkgver=$(curl -sL http://www.zsh.org/pub/ | grep ".*[0-9].*tar.gz" | tail -n 1 | sed 's/.*"zsh-//g' | sed 's/.tar.gz.*//g')
-pkgpver=$(cat /data/OBS/home:fusion809/zsh/zsh.spec | grep Version | cut -d ' ' -f 2)
-
-if ! [[ $pkgver == $pkgpver ]]; then
-    zenity --error --text="A new Zsh release (${pkgver}) is available! To update to it run zshup." --title="Warning!"
-fi

@@ -2,6 +2,8 @@ function update {
   sudo eopkg upgrade -y
 }
 
+alias spuy=update
+
 function spiy {
   sudo eopkg install -y "$@"
 }

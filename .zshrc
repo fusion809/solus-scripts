@@ -1,13 +1,13 @@
+#!/bin/zsh
+export TERM="xterm-256color"
 # Path to your oh-my-zsh installation.
-export PATH="/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl:/root/.gem/ruby/2.2.0/bin:/home/fusion809/.gem/ruby/2.2.0/bin:/usr/lib/jvm/java-8-openjdk/bin/:/bin:/usr/bin:/sbin:/usr/sbin"
-export ZSH=/home/fusion809/.oh-my-zsh
+export ZSH=$HOME/.oh-my-zsh
 export ZSH_DISABLE_COMPFIX="true"
-
 # Set name of the theme to load.
-# Look in $HOME/.oh-my-zsh/themes/
+# Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
-ZSH_THEME="hcompact"
+ZSH_THEME="hfulldate"
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
@@ -47,13 +47,16 @@ ZSH_THEME="hcompact"
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
-# Which plugins would you like to load? (plugins can be found in $HOME/.oh-my-zsh/plugins/*)
-# Custom plugins may be added to $HOME/.oh-my-zsh/custom/plugins/
+# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
+# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git zsh-syntax-highlighting)
+plugins=(git github zsh-syntax-highlighting vi-mode
+#safe-paste zsh-completions
+)
 autoload -U compinit && compinit
-source $ZSH/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh
+source $ZSH/oh-my-zsh.sh
+source $HOME/.oh-my-zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh
 # bind UP and DOWN arrow keys
 zmodload zsh/terminfo
 bindkey "$terminfo[kcuu1]" history-substring-search-up
@@ -71,11 +74,10 @@ bindkey '^[[B' history-substring-search-down
 # # bind k and j for VI mode
 # bindkey -M vicmd 'k' history-substring-search-up
 # bindkey -M vicmd 'j' history-substring-search-down
-
 # User configuration
-# export MANPATH="/usr/local/man:$MANPATH"
 
-source $ZSH/oh-my-zsh.sh
+export PATH=$HOME/bin:/usr/local/bin:$PATH
+# export MANPATH="/usr/local/man:$MANPATH"
 
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
@@ -91,7 +93,7 @@ source $ZSH/oh-my-zsh.sh
 # export ARCHFLAGS="-arch x86_64"
 
 # ssh
-# export SSH_KEY_PATH="$HOME/.ssh/dsa_id"
+# export SSH_KEY_PATH="~/.ssh/dsa_id"
 
 # Set personal aliases, overriding those provided by oh-my-zsh libs,
 # plugins, and themes. Aliases can be placed here, though oh-my-zsh
@@ -99,9 +101,9 @@ source $ZSH/oh-my-zsh.sh
 # For a full list of active aliases, run `alias`.
 #
 # Example aliases
-# alias zshconfig="mate $HOME/.zshrc"
-# alias ohmyzsh="mate $HOME/.oh-my-zsh"
+# alias zshconfig="mate ~/.zshrc"
+# alias ohmyzsh="mate ~/.oh-my-zsh"
 for i in $HOME/Shell/*.sh
 do
-	. "$i"
+  . "$i"
 done
